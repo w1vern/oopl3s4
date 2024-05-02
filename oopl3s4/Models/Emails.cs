@@ -7,7 +7,6 @@ namespace oopl3s4.Models
     public class Emails
     {
         public int Id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Email { get; set; }
         
         public int ArtisanID { get; set; }

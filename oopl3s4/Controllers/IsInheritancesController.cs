@@ -57,7 +57,7 @@ namespace oopl3s4.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ArtisanID,isInh")] IsInheritance isInheritance)
+        public async Task<IActionResult> Create([Bind("Id,ArtisanID")] IsInheritance isInheritance)
         {
             //if (ModelState.IsValid)
             {
@@ -91,14 +91,14 @@ namespace oopl3s4.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ArtisanID,isInh")] IsInheritance isInheritance)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ArtisanID")] IsInheritance isInheritance)
         {
             if (id != isInheritance.Id)
             {
                 return NotFound();
             }
 
-           // if (ModelState.IsValid)
+            //if (ModelState.IsValid)
             {
                 try
                 {

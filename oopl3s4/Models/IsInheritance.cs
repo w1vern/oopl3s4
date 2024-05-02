@@ -8,6 +8,5 @@ namespace oopl3s4.Models
         public int ArtisanID { get; set; }
         [ForeignKey("ArtisanID")]
         public Artisan Artisan { get; set; }
-        public bool isInh { get; set; }
     }
 }
