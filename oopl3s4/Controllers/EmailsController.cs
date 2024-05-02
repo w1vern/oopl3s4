@@ -10,23 +10,23 @@ using oopl3s4.Models;
 
 namespace oopl3s4.Controllers
 {
-    public class RelationsController : Controller
+    public class EmailsController : Controller
     {
         private readonly MyDbContext _context;
 
-        public RelationsController(MyDbContext context)
+        public EmailsController(MyDbContext context)
         {
             _context = context;
         }
 
-        // GET: Relations
+        // GET: Emails
         public async Task<IActionResult> Index()
         {
-            var myDbContext = _context.Relation.Include(r => r.Artisan).Include(r => r.Craft);
+            var myDbContext = _context.Emails.Include(e => e.Artisan);
             return View(await myDbContext.ToListAsync());
         }
 
-        // GET: Relations/Details/5
+        // GET: Emails/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,45 +34,42 @@ namespace oopl3s4.Controllers
                 return NotFound();
             }
 
-            var relation = await _context.Relation
-                .Include(r => r.Artisan)
-                .Include(r => r.Craft)
+            var emails = await _context.Emails
+                .Include(e => e.Artisan)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (relation == null)
+            if (emails == null)
             {
                 return NotFound();
             }
 
-            return View(relation);
+            return View(emails);
         }
 
-        // GET: Relations/Create
+        // GET: Emails/Create
         public IActionResult Create()
         {
             ViewData["ArtisanID"] = new SelectList(_context.Artisan, "Id", "Id");
-            ViewData["CraftID"] = new SelectList(_context.Craft, "Id", "Id");
             return View();
         }
 
-        // POST: Relations/Create
+        // POST: Emails/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ArtisanID,CraftID")] Relation relation)
+        public async Task<IActionResult> Create([Bind("Id,Email,ArtisanID")] Emails emails)
         {
             //if (ModelState.IsValid)
             {
-                _context.Add(relation);
+                _context.Add(emails);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtisanID"] = new SelectList(_context.Artisan, "Id", "Id", relation.ArtisanID);
-            ViewData["CraftID"] = new SelectList(_context.Craft, "Id", "Id", relation.CraftID);
-            return View(relation);
+            ViewData["ArtisanID"] = new SelectList(_context.Artisan, "Id", "Id", emails.ArtisanID);
+            return View(emails);
         }
 
-        // GET: Relations/Edit/5
+        // GET: Emails/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,38 +77,37 @@ namespace oopl3s4.Controllers
                 return NotFound();
             }
 
-            var relation = await _context.Relation.FindAsync(id);
-            if (relation == null)
+            var emails = await _context.Emails.FindAsync(id);
+            if (emails == null)
             {
                 return NotFound();
             }
-            ViewData["ArtisanID"] = new SelectList(_context.Artisan, "Id", "Id", relation.ArtisanID);
-            ViewData["CraftID"] = new SelectList(_context.Craft, "Id", "Id", relation.CraftID);
-            return View(relation);
+            ViewData["ArtisanID"] = new SelectList(_context.Artisan, "Id", "Id", emails.ArtisanID);
+            return View(emails);
         }
 
-        // POST: Relations/Edit/5
+        // POST: Emails/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ArtisanID,CraftID")] Relation relation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,ArtisanID")] Emails emails)
         {
-            if (id != relation.Id)
+            if (id != emails.Id)
             {
                 return NotFound();
             }
 
-           // if (ModelState.IsValid)
+            //if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(relation);
+                    _context.Update(emails);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RelationExists(relation.Id))
+                    if (!EmailsExists(emails.Id))
                     {
                         return NotFound();
                     }
@@ -122,12 +118,11 @@ namespace oopl3s4.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtisanID"] = new SelectList(_context.Artisan, "Id", "Id", relation.ArtisanID);
-            ViewData["CraftID"] = new SelectList(_context.Craft, "Id", "Id", relation.CraftID);
-            return View(relation);
+            ViewData["ArtisanID"] = new SelectList(_context.Artisan, "Id", "Id", emails.ArtisanID);
+            return View(emails);
         }
 
-        // GET: Relations/Delete/5
+        // GET: Emails/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,36 +130,35 @@ namespace oopl3s4.Controllers
                 return NotFound();
             }
 
-            var relation = await _context.Relation
-                .Include(r => r.Artisan)
-                .Include(r => r.Craft)
+            var emails = await _context.Emails
+                .Include(e => e.Artisan)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (relation == null)
+            if (emails == null)
             {
                 return NotFound();
             }
 
-            return View(relation);
+            return View(emails);
         }
 
-        // POST: Relations/Delete/5
+        // POST: Emails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var relation = await _context.Relation.FindAsync(id);
-            if (relation != null)
+            var emails = await _context.Emails.FindAsync(id);
+            if (emails != null)
             {
-                _context.Relation.Remove(relation);
+                _context.Emails.Remove(emails);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RelationExists(int id)
+        private bool EmailsExists(int id)
         {
-            return _context.Relation.Any(e => e.Id == id);
+            return _context.Emails.Any(e => e.Id == id);
         }
     }
 }
