@@ -7,14 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<oopl3s4.Data.MyDbContext>(options => options.UseSqlServer(connection));
+builder.Services.AddDbContext<oopl3s4.Data.MyDbContext>(options => options.UseNpgsql(connection));
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
 
-/*// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -31,8 +31,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");*/
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapGet("/", (oopl3s4.Data.MyDbContext db) => db.Employees.ToList());
+//app.MapGet("/", (oopl3s4.Data.MyDbContext db) => db.Employees.ToList());
 
 app.Run();
